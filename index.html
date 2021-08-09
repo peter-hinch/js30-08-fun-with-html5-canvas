@@ -19,6 +19,7 @@
   ctx.strokeStyle = '#BADA55';
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
   
   let isDrawing  = false;
   let lastX = 0;
@@ -28,11 +29,20 @@
     // stop the function from running when the mouse button is not down
     if(!isDrawing) return;
     console.log(e);
+    ctx.beginPath(); // start a path
+    ctx.moveTo(lastX, lastY); // line start point
+    ctx.lineTo(e.offsetX, e.offsetY); // line end point
+    ctx.stroke();
+    [lastX, lastY] = [e.offsetX, e.offsetY];
   }
+  // when the mouse button is pressed, get the location of the pointer and
+  // set isDrawing to true
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
   // when the mouse is moving, call the draw function
   canvas.addEventListener('mousemove', draw);
-  // create event listeners to evaluate whether the mouse is drawing
-  canvas.addEventListener('mousedown', () => isDrawing = true);
   canvas.addEventListener('mouseup', () => isDrawing = false);
   canvas.addEventListener('mouseout', () => isDrawing = false);
 </script>
