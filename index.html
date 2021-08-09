@@ -7,8 +7,35 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
-</script>
+  const canvas = document.querySelector('#draw');
+  // create a context for the canvas
+  const ctx = canvas.getContext('2d');
 
+  // set the canvas width and height to match the window
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // set stroke, lineJoin (corners treatment) and lineCap (end treatment)
+  ctx.strokeStyle = '#BADA55';
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  
+  let isDrawing  = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  function draw(e) {
+    // stop the function from running when the mouse button is not down
+    if(!isDrawing) return;
+    console.log(e);
+  }
+  // when the mouse is moving, call the draw function
+  canvas.addEventListener('mousemove', draw);
+  // create event listeners to evaluate whether the mouse is drawing
+  canvas.addEventListener('mousedown', () => isDrawing = true);
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseout', () => isDrawing = false);
+</script>
 <style>
   html, body {
     margin: 0;
