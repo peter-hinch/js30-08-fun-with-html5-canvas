@@ -20,20 +20,42 @@
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
   ctx.lineWidth = 100;
+  // blend modes are available in canvas (similar to photoshop)
+  // reference: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Compositing
+  //ctx.globalCompositeOperation = 'multiply';
+  //ctx.globalCompositeOperation = 'screen';
   
   let isDrawing  = false;
   let lastX = 0;
   let lastY = 0;
+  let hue = 0;
+  let direction = true;
 
   function draw(e) {
     // stop the function from running when the mouse button is not down
     if(!isDrawing) return;
+    
     console.log(e);
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%`;
     ctx.beginPath(); // start a path
     ctx.moveTo(lastX, lastY); // line start point
     ctx.lineTo(e.offsetX, e.offsetY); // line end point
     ctx.stroke();
+    
+    // assign lastX and lastY to the most recent mouse location
+    // multiple values can be assigned at the same time by destructuring array
     [lastX, lastY] = [e.offsetX, e.offsetY];
+    
+    // hue is between 0 and 359 - larger values still work (e.g. hue % 360)
+    //hue++;
+    // alternatively:
+    hue >= 360 ? hue = 0 : hue ++;
+
+    // determine if lineWidth should be increasing or decreasing
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1)
+      direction = !direction;
+    // set the lineWidth according to the direction
+    direction ? ctx.lineWidth++ : ctx.lineWidth--
   }
   // when the mouse button is pressed, get the location of the pointer and
   // set isDrawing to true
